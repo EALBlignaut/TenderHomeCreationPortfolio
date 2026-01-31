@@ -1,0 +1,129 @@
+:root{
+  --bg:#0f1115;
+  --ink:#e9eef7;
+  --muted:#a6b0c3;
+  --btn:#1e2633;
+  --btnHover:#2a3547;
+  --shadow: 0 20px 60px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: radial-gradient(1200px 600px at 50% 10%, rgba(122,162,247,.16), transparent 60%),
+              radial-gradient(800px 500px at 50% 80%, rgba(122,162,247,.10), transparent 60%),
+              var(--bg);
+  color:var(--ink);
+}
+.topbar{
+  position:sticky; top:0;
+  display:flex; gap:12px;
+  align-items:center; justify-content:space-between;
+  padding:12px 14px;
+  background:rgba(15,17,21,.88);
+  backdrop-filter: blur(10px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  z-index:10;
+}
+.brand{font-weight:700; letter-spacing:.2px; font-size:14px}
+.controls{display:flex; align-items:center; gap:10px}
+.pageinfo{color:var(--muted); font-variant-numeric: tabular-nums; min-width:140px; text-align:center; font-size:13px}
+.btn{
+  appearance:none;
+  border:1px solid rgba(255,255,255,.10);
+  background:var(--btn);
+  color:var(--ink);
+  border-radius:12px;
+  padding:10px 12px;
+  cursor:pointer;
+  user-select:none;
+  transition:transform .06s ease, background .15s ease, border-color .15s ease;
+}
+.btn:hover{background:var(--btnHover); border-color: rgba(255,255,255,.18);}
+.btn:active{transform: translateY(1px);}
+.btn:disabled{opacity:.45; cursor:not-allowed}
+
+.stage{
+  display:flex; flex-direction:column;
+  align-items:center; gap:10px;
+  padding:18px 14px 22px;
+}
+.hint{color:var(--muted); font-size:12px; text-align:center}
+
+.book{
+  width:min(980px, 96vw);
+  aspect-ratio: 2012 / 756; /* open book: 2 x (1006 x 756) */
+  max-height: calc(100vh - 170px);
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow: var(--shadow);
+  position:relative;
+  perspective: 2400px;
+  overflow:hidden;
+  background:rgba(255,255,255,.02);
+}
+
+/* gutter */
+.book.spread::before{
+  content:"";
+  position:absolute; top:0; bottom:0;
+  left:50%; width:2px;
+  background:linear-gradient(to bottom, transparent, rgba(255,255,255,.12), transparent);
+  transform:translateX(-1px);
+  pointer-events:none;
+}
+
+.page{
+  position:absolute; top:0; bottom:0;
+  overflow:hidden;
+  backface-visibility:hidden;
+  transform-style:preserve-3d;
+  background:#0b0d12;
+}
+.page.left{left:0; width:50%; border-right:1px solid rgba(255,255,255,.08);}
+.page.right{left:50%; width:50%; border-left:1px solid rgba(0,0,0,.25);}
+
+.page.single{
+  left:25%;
+  width:50%;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.10);
+}
+
+.page img{
+  width:100%;
+  height:100%;
+  object-fit:contain; /* prevents squashing */
+  background:#0b0d12;
+}
+
+/* covers feel */
+.page.cover{
+  background: linear-gradient(135deg, #0a0d14, #151a22);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.14),
+    inset 12px 0 18px rgba(0,0,0,.55);
+}
+.page.cover img{object-fit:cover;}
+
+/* flip layer */
+.flip{
+  position:absolute; top:0; bottom:0;
+  width:50%;
+  left:50%;
+  transform-origin:left center;
+  transform: rotateY(0deg);
+  transition: transform 620ms cubic-bezier(.2,.8,.2,1);
+  pointer-events:none;
+  box-shadow: -14px 0 34px rgba(0,0,0,.35);
+}
+.flip .front, .flip .back{
+  position:absolute; inset:0;
+  backface-visibility:hidden;
+  overflow:hidden;
+  background:#0b0d12;
+}
+.flip img{width:100%; height:100%; object-fit:contain; background:#0b0d12;}
+.flip .back{transform: rotateY(180deg);}
+
+.turning .flip{transform: rotateY(-180deg);}
